@@ -8,9 +8,10 @@ public class HandleForces : MonoBehaviour
     public Mesh mesh;
     public Material material;
     public float ParticleScale;
-    public float gravity;
+    //public float gravity;
     public float attraction_scale;
-    public float spacing;
+    public float ParticleSpacing;
+    public float dampening;
     public int Particle_Count;
     public Color[] colors;
     public Vector2 boundSize;
@@ -41,12 +42,12 @@ public class HandleForces : MonoBehaviour
         if (Math.Abs(positions[index].x) > halfBoundSize.x)
         {
             positions[index].x = halfBoundSize.x * math.sign(positions[index].x);
-            velocitys[index].x *= -1;
+            velocitys[index].x *= -1 + dampening;
         }
         if (Math.Abs(positions[index].y) > halfBoundSize.y)
         {
             positions[index].y = halfBoundSize.y * math.sign(positions[index].y);
-            velocitys[index].y *= -1;
+            velocitys[index].y *= -1 + dampening;
         }
     }
 
@@ -55,10 +56,20 @@ public class HandleForces : MonoBehaviour
         positions = new Vector2[Particle_Count];
         velocitys = new Vector2[Particle_Count];
 
+        int particlesPerRow = (int)math.sqrt(Particle_Count);
+        int particlesPerCol = (Particle_Count -1) / particlesPerRow + 1;
+        float spacing = ParticleScale + ParticleSpacing;
+
         for(int i = 0; i < Particle_Count; i++)
         {
-            positions[i] = new Vector2(i*2,i);
+            float x = (i % particlesPerRow - particlesPerRow / 2f + 0.5f) * spacing;
+            float y = (i / particlesPerCol - particlesPerCol / 2f + 0.5f) * spacing;
+
+            positions[i] = new Vector2(x,y);
         }
+
+
+        
         
         block = new MaterialPropertyBlock();
         rp = new RenderParams(material)
@@ -74,6 +85,11 @@ public class HandleForces : MonoBehaviour
         {
             //velocitys[i] += Vector2.down * gravity * Time.deltaTime;
             velocitys[i] += calcForce(i) * Time.deltaTime;
+            /* positions[i] += velocitys[i] * Time.deltaTime;
+            HandleBoundsCollisions(i); */
+        }
+        for(int i = 0; i < Particle_Count; i++)
+        {
             positions[i] += velocitys[i] * Time.deltaTime;
             HandleBoundsCollisions(i);
         }
