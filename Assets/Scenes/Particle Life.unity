@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -241,7 +241,7 @@ Camera:
   far clip plane: 2
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 376
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -303,16 +303,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HandleForces
   mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  ParticleScale: 0.2
-  attraction_scale: 0
-  ParticleSpacing: 0.1
-  dampening: 0.5
-  Particle_Count: 676
+  ParticleCount: 2000
+  ParticleScale: 2
+  ParticleSpacing: 6
+  dampening: 0
+  frictionFactor: 0.04
+  timeFactor: 0.02
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
-  boundSize: {x: 10, y: 10}
+  - {r: 1, g: 1, b: 0, a: 1}
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  forceScale: 10
+  forceMultiplier: []
+  minRandomMinRange: 10
+  maxRandomMinRange: 32
+  maxRandomMaxRange: 64
+  minRange: []
+  maxRange: []
+  boundSize: {x: 750, y: 750}
 --- !u!4 &1345908842
 Transform:
   m_ObjectHideFlags: 0
