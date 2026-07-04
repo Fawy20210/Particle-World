@@ -1,3 +1,5 @@
+using System;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,13 +7,17 @@ public class HandleForces : MonoBehaviour
 {
     public Mesh mesh;
     public Material material;
+    public float ParticleScale;
     public float gravity;
     public float attraction_scale;
     public float spacing;
     public int Particle_Count;
+    public Color[] colors;
+    public Vector2 boundSize;
     Vector2[] positions;
     Vector2[] velocitys;
 
+    MaterialPropertyBlock block;
     RenderParams rp;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -28,6 +34,21 @@ public class HandleForces : MonoBehaviour
         }
         return total_force;
     }
+    void HandleBoundsCollisions(int index)
+    {
+        
+        Vector2 halfBoundSize = boundSize / 2 - Vector2.one * ParticleScale / 2;
+        if (Math.Abs(positions[index].x) > halfBoundSize.x)
+        {
+            positions[index].x = halfBoundSize.x * math.sign(positions[index].x);
+            velocitys[index].x *= -1;
+        }
+        if (Math.Abs(positions[index].y) > halfBoundSize.y)
+        {
+            positions[index].y = halfBoundSize.y * math.sign(positions[index].y);
+            velocitys[index].y *= -1;
+        }
+    }
 
     void Start()
     {
@@ -39,7 +60,11 @@ public class HandleForces : MonoBehaviour
             positions[i] = new Vector2(i*2,i);
         }
         
-        rp = new RenderParams(material);
+        block = new MaterialPropertyBlock();
+        rp = new RenderParams(material)
+        {
+            matProps = block
+        };
     }
 
     // Update is called once per frame
@@ -50,11 +75,25 @@ public class HandleForces : MonoBehaviour
             //velocitys[i] += Vector2.down * gravity * Time.deltaTime;
             velocitys[i] += calcForce(i) * Time.deltaTime;
             positions[i] += velocitys[i] * Time.deltaTime;
+            HandleBoundsCollisions(i);
         }
 
         for(int i = 0; i < Particle_Count; i++)
         {
-            Graphics.RenderMesh(rp, mesh, 0, Matrix4x4.Translate(positions[i])); //new Vector3(-4.5f, 0.0f, 5.0f)
+            block.SetColor("_Color", colors[i%colors.Length]);
+            Vector2 scale = new Vector2(ParticleScale,ParticleScale);
+            Graphics.RenderMesh(rp, mesh, 0, Matrix4x4.TRS(positions[i], Quaternion.Euler(new Vector2(0,0)), scale)); //new Vector3(-4.5f, 0.0f, 5.0f)
         }
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(Vector2.zero, boundSize);
+    }
 }
+/* # Devlog 2: Changing my approach
+I have now decided to not have each particle be a GameObject, but instead handle all of them from 1 Script that stores each particles position and velocity, to then calculate interactions and draw them. Right now I'm doing the drawing using `Graphics.RenderMesh()` for each individual particle, and I can already have them be attracted or repelled by each other.
+## What I plan on doing next:
+- Add a border, so the particles don't escape.
+- Make it so the particles starting positions are spread out.
+- Add the possibility for particles to have different colors. */
