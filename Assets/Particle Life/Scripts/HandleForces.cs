@@ -38,6 +38,14 @@ public class HandleForces : MonoBehaviour
 
     int2[] spatialLookUp;
     int[] startIndices;
+    (int offsetX, int offsetY)[] offsets =
+        {
+            (-1, 1), (0, 1), (1, 1),
+            (-1, 0), (0,0), (1, 0),
+            (-1, -1), (0, -1), (1, -1)
+        };
+
+
     
    
 
@@ -55,6 +63,10 @@ public class HandleForces : MonoBehaviour
     int getCellKey(Vector2 val)
     {
         return hashfunc(Mathf.FloorToInt(val.x/maxRandomMaxRange), Mathf.FloorToInt(val.y/maxRandomMaxRange));
+    }
+    (int x, int y) PositionToCellPos(Vector2 val)
+    {
+        return (Mathf.FloorToInt(val.x/maxRandomMaxRange), Mathf.FloorToInt(val.y/maxRandomMaxRange));
     }
     
     void updateSpatialLookup()
@@ -160,7 +172,39 @@ public class HandleForces : MonoBehaviour
         for(int i = 0; i < ParticleCount; i++)
         {   
             velocitys[i] *= frictionFactor;
-            for (int j=0; j<ParticleCount; j++)
+
+            (int cellX, int cellY) = PositionToCellPos(positions[i]);
+
+            foreach ((int offsetX, int offsetY) in offsets)
+            {
+                int key = hashfunc(cellX+offsetX, cellY+offsetY);
+                int startIndex = startIndices[key];
+
+                for(int j=startIndex; 0<=j && j<spatialLookUp.Length; j++)
+                {
+                    if (spatialLookUp[j].x != key) break;
+
+                    int particleIndex = spatialLookUp[j].y;
+
+                    Vector2 dir = positions[particleIndex]-positions[i];
+                    float sqrDistance = dir.sqrMagnitude;
+
+
+                    int RangeIndex = i % colors.Length + particleIndex % colors.Length * colors.Length;
+
+
+                    if(sqrDistance < maxRange[RangeIndex] * maxRange[RangeIndex] && 0 < sqrDistance)
+                    {
+                        float distance = MathF.Sqrt(sqrDistance);
+
+                        float attractionFactor = forceMultiplier[RangeIndex];
+                        velocitys[i] += maxRange[RangeIndex] * dir.normalized * ForceFunction(distance/maxRange[RangeIndex], attractionFactor, minRange[RangeIndex]/maxRange[RangeIndex]) * forceScale * timeFactor;    
+                    }
+                }
+            }
+
+
+            /* for (int j=0; j<ParticleCount; j++)
             {
                 if(i != j)
                 {
@@ -174,7 +218,7 @@ public class HandleForces : MonoBehaviour
                         velocitys[i] += maxRange[index] * dir.normalized * ForceFunction(distance/maxRange[index], attractionFactor, minRange[index]/maxRange[index]) * forceScale * timeFactor;                    
                     }
                 }
-            }
+            } */
         }
         
         for(int i = 0; i < ParticleCount; i++)
@@ -186,6 +230,7 @@ public class HandleForces : MonoBehaviour
         int curKey = getCellKey(positions[curspat]);
         for(int i = 0; i < ParticleCount; i++)
         {
+            //To-Do: add debug feature for sector highlightning. block.SetColor("_Color", getCellKey(positions[i]) == curKey ? Color.red : colors[i%colors.Length]);
             block.SetColor("_Color", getCellKey(positions[i]) == curKey ? Color.red : colors[i%colors.Length]); //colors[i%colors.Length]
             Vector2 scale = new Vector2(ParticleScale,ParticleScale);
             Graphics.RenderMesh(rp, mesh, 0, Matrix4x4.TRS(positions[i], Quaternion.Euler(new Vector2(0,0)), scale)); //new Vector3(-4.5f, 0.0f, 5.0f)
