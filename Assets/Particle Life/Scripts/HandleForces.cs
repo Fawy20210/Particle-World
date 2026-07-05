@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using NUnit.Framework.Internal;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -34,11 +36,50 @@ public class HandleForces : MonoBehaviour
     Vector2[] positions;
     Vector2[] velocitys;
 
+    int2[] spatialLookUp;
+    int[] startIndices;
+    
+   
 
     MaterialPropertyBlock block;
     RenderParams rp;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int curspat;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    int hashfunc(int x, int y)
+    {
+        int cellX = math.abs(x) * (x < 0 ? 2377 : 2069);
+        int cellY = math.abs(y) * (y < 0 ? 607 : 733);
+        return (cellX + cellY) % ParticleCount;
+    }
+    int getCellKey(Vector2 val)
+    {
+        return hashfunc(Mathf.FloorToInt(val.x/maxRandomMaxRange), Mathf.FloorToInt(val.y/maxRandomMaxRange));
+    }
+    
+    void updateSpatialLookup()
+    {
+        Parallel.For(0, ParticleCount, i =>
+        {
+            int cellkey = getCellKey(positions[i]);
+            spatialLookUp[i] = new int2(cellkey, i);
+            startIndices[i] = -1;
+        });
 
+        Array.Sort(spatialLookUp, (a,b) => a.x.CompareTo(b.x));
+
+        Parallel.For(0, ParticleCount, i =>
+        {
+            int key = spatialLookUp[i].x;
+            int keyprev = (i == 0) ? -1 : spatialLookUp[i-1].x;
+
+            if(key != keyprev)
+            {
+                //Debug.Log(key);
+                startIndices[key] = i;
+            }
+        });  
+    }
     float ForceFunction(float distance, float attractionFactor, float minDistance)
     {
         if (distance < minDistance)
@@ -71,9 +112,12 @@ public class HandleForces : MonoBehaviour
     }
 
     void Start()
-    {
+    {   
         positions = new Vector2[ParticleCount*10];
         velocitys = new Vector2[ParticleCount*10];
+        spatialLookUp = new int2[ParticleCount];
+        startIndices = new int[ParticleCount];
+
         if (forceMultiplier.Length == 0) forceMultiplier = new float[colors.Length*colors.Length];
         if (minRange.Length == 0) minRange = new float[colors.Length*colors.Length];
         if (maxRange.Length == 0) maxRange = new float[colors.Length*colors.Length];
@@ -88,7 +132,8 @@ public class HandleForces : MonoBehaviour
             float y = (i / particlesPerCol - particlesPerCol / 2f + 0.5f) * spacing;
 
             positions[i] = new Vector2(x,y);
-        }        
+        }
+        //updateSpatialLookup();
         
         block = new MaterialPropertyBlock();
         rp = new RenderParams(material)
@@ -110,7 +155,8 @@ public class HandleForces : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        updateSpatialLookup();
         for(int i = 0; i < ParticleCount; i++)
         {   
             velocitys[i] *= frictionFactor;
@@ -137,9 +183,10 @@ public class HandleForces : MonoBehaviour
             HandleBoundsCollisions(i);
         }
 
+        int curKey = getCellKey(positions[curspat]);
         for(int i = 0; i < ParticleCount; i++)
         {
-            block.SetColor("_Color", colors[i%colors.Length]);
+            block.SetColor("_Color", getCellKey(positions[i]) == curKey ? Color.red : colors[i%colors.Length]); //colors[i%colors.Length]
             Vector2 scale = new Vector2(ParticleScale,ParticleScale);
             Graphics.RenderMesh(rp, mesh, 0, Matrix4x4.TRS(positions[i], Quaternion.Euler(new Vector2(0,0)), scale)); //new Vector3(-4.5f, 0.0f, 5.0f)
         }
