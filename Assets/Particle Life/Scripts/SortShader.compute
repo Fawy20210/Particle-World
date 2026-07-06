@@ -1,0 +1,34 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Sort
+
+RWStructuredBuffer<int2> _values;
+
+int _numValues;
+int _groupWidth;
+int _groupHeight;
+int _stepIndex;
+
+[numthreads(128, 1, 1)]
+void Sort (uint3 id : SV_DispatchThreadID)
+{
+	uint i = id.x;
+
+	uint hIndex = i & (_groupWidth - 1);
+	uint indexLeft = hIndex + (_groupHeight + 1) * (i / _groupWidth);
+	uint rightStepSize = _stepIndex == 0 ? _groupHeight - 2 * hIndex : (_groupHeight + 1) / 2;
+	uint indexRight = indexLeft + rightStepSize;
+
+	// Exit if out of bounds (for non-power of 2 input sizes)
+	if (indexRight >= _numValues) return;
+
+	uint valueLeft = _values[indexLeft].x;
+	uint valueRight = _values[indexRight].x;
+
+	// Swap entries if value is descending
+	if (valueLeft > valueRight)
+	{
+		Entry temp = _values[indexLeft];
+		_values[indexLeft] = _values[indexRight];
+		_values[indexRight] = temp;
+	}
+}

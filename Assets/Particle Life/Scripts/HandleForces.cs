@@ -259,4 +259,14 @@ I made it so instead of using `Time.deltaTime` it now uses a fixed value that yo
 So now, I'd have a usable version of Particle Life, but as you can see my To-Do list isn't quite finished yet:
 - ~~Add interaction based on color and distance.~~
 - Optimize and Improve calculations.
-- Add an GUI / Interface */
+- Add an GUI / Interface 
+# Devlog 5: Speed up thanks to Spatial Partitioning
+So now I've done it, the next thing on my To-Do list, as seen in my [last Devlog](https://stardance.hackclub.com/projects/14075/devlogs/18862) was to *Optimize and Improve calculations*, and I did that, mostly by implementing Spatial Partitioning.
+How it works is that, if there is only a certain range around an particle, in this case the MaxRange, you can pretty much ignore everything outside of this range when calculating attraction, instead of having to check the distance to each particle, and getting the same result. To do that you split the area where the particles can be into squares(Cells) with length of MaxRange, and then assinging each particle a key, which you get like this:
+```key = someHashFunction(CellPos.x, CellPos.y) % ParticleAmount```
+And then with some sorting and such, you can calculate the attractions, only the Cell the particles in, and the 8 cells around it.
+
+This was somewhat simplified, but I hope one could understand it.
+
+To-Do:
+- */

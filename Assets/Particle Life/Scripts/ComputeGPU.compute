@@ -1,0 +1,176 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel updateSpatialLookup
+#pragma kernel updateStartIndices
+#pragma kernel updateVelocities
+#pragma kernel updatePosition
+
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+//RWTexture2D<float4> Result;
+RWStructuredBuffer<float2> _positions;
+RWStructuredBuffer<float2> _velocities;
+
+RWStructuredBuffer<float> _attractionMatrix;
+
+RWStructuredBuffer<float> _minRange;
+RWStructuredBuffer<float> _maxRange;
+
+RWStructuredBuffer<int2> _spatialLookUp;
+RWStructuredBuffer<int> _startIndices;
+
+int _particleCount;
+float _frictionFactor;
+float _timeFactor;
+float _forceScale;
+int _colorCount;
+int _maxRandomMaxRange;
+float2 _boundSize;
+
+int2 offsets[9] =
+        {
+            (-1, 1), (0, 1), (1, 1),
+            (-1, 0), (0,0), (1, 0),
+            (-1, -1), (0, -1), (1, -1)
+        };
+
+static const int threads = 64;
+
+int hashfunc(int x, int y)
+{
+    int cellX = abs(x) * (x < 0 ? 2377 : 2069);
+    int cellY = abs(y) * (y < 0 ? 607 : 733);
+    return fmod(cellX + cellY, _particleCount);
+}
+
+int getCellKey(int2 val)
+{
+    return hashfunc(floor(val.x/_maxRandomMaxRange), floor(val.y/_maxRandomMaxRange));
+}
+
+int2 PositionToCellPos(float2 val)
+{
+    //return int2(floor(val.x/_maxRandomMaxRange), floor(val.y/_maxRandomMaxRange));
+    return int2(floor(val/_maxRandomMaxRange));
+}
+[numthreads(64,1,1)]
+void updateSpatialLookup(uint3 id : SV_DispatchThreadID)
+{
+    int i = id.x;
+    int cellkey = getCellKey(_positions[i]);
+    _spatialLookUp[i] = int2(cellkey, i);
+    _startIndices[i] = -1;
+
+    //Array.Sort(_spatialLookUp, (a,b) => a.x.CompareTo(b.x));
+
+    /* int key = _spatialLookUp[i].x;
+    int keyprev = (i == 0) ? -1 : _spatialLookUp[i-1].x;
+
+    if(key != keyprev)
+    {
+        //Debug.Log(key);
+        _startIndices[key] = i;
+    } */
+}
+
+[numthreads(64,1,1)]
+void updateStartIndices(uint3 id : SV_DispatchThreadID){
+    int i = id.x;
+
+    int key = _spatialLookUp[i].x;
+    int keyprev = (i == 0) ? -1 : _spatialLookUp[i-1].x;
+
+    if(key != keyprev)
+    {
+        //Debug.Log(key);
+        _startIndices[key] = i;
+    }
+}
+
+
+
+float ForceFunction(float distance, float attractionFactor, float minDistance)
+{
+    if (distance < minDistance)
+    {
+        return distance/minDistance - 1;
+    }
+    else if (distance < 1)
+    {
+        return attractionFactor*(1-abs(2*distance-1-minDistance)/(1-minDistance));
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void HandleBoundsCollisions(int index)
+{
+    int2 halfBoundSize = _boundSize / 2 - float2(_particleCount/2,_particleCount/2);
+    if (abs(_positions[index].x) > halfBoundSize.x)
+    {
+        _positions[index].x = halfBoundSize.x * (_positions[index].x/abs(_positions[index].x));
+        _velocities[index].x *= -1;
+    }
+    if (abs(_positions[index].y) > halfBoundSize.y)
+    {
+        _positions[index].y = halfBoundSize.y * (_positions[index].y/abs(_positions[index].y));
+        _velocities[index].y *= -1;
+    }
+}
+
+[numthreads(64,1,1)]
+void updateVelocities(uint3 id : SV_DispatchThreadID){
+    int i = id.x;
+    _velocities[i] *= _frictionFactor;
+
+    int2 cell = PositionToCellPos(_positions[i]);
+
+    for(int q =0; q<9; q++)
+    {
+        int key = hashfunc(cell.x+offsets[q].x, cell.y+offsets[q].y);
+        int startIndex = _startIndices[key];
+
+        for(int j=startIndex; 0<=j && j<_particleCount; j++)
+        {
+            if (_spatialLookUp[j].x != key) break;
+
+            int particleIndex = _spatialLookUp[j].y;
+
+            float2 dir = _positions[particleIndex]-_positions[i];
+            float sqrDistance = dot(dir,dir); //dot == sqrmagnitude
+
+
+            int RangeIndex = modf(i, _colorCount + particleIndex % _colorCount * _colorCount);
+
+
+            if(sqrDistance < _maxRange[RangeIndex] * _maxRange[RangeIndex] && 0 < sqrDistance)
+            {
+                
+                float distance = sqrt(sqrDistance);
+
+                float attractionFactor = _attractionMatrix[RangeIndex];
+                _velocities[i] += _maxRange[RangeIndex] * normalize(dir) * ForceFunction(distance/_maxRange[RangeIndex], attractionFactor, _minRange[RangeIndex]/_maxRange[RangeIndex]) * _forceScale * _timeFactor;    
+            }
+        }
+    }
+}
+
+[numthreads(64,1,1)]
+void updatePosition(uint3 id : SV_DispatchThreadID){
+    int i = id.x;
+    _positions[i] += _velocities[i] * _timeFactor; //Time.deltaTime; timefactor
+    //HandleBoundsCollisions(i);
+    int2 halfBoundSize = _boundSize / 2 - float2(_particleCount/2,_particleCount/2);
+    if (abs(_positions[i].x) > halfBoundSize.x)
+    {
+        _positions[i].x = halfBoundSize.x * (_positions[i].x/abs(_positions[i].x));
+        _velocities[i].x *= -1;
+    }
+    if (abs(_positions[i].y) > halfBoundSize.y)
+    {
+        _positions[i].y = halfBoundSize.y * (_positions[i].y/abs(_positions[i].y));
+        _velocities[i].y *= -1;
+    }
+}

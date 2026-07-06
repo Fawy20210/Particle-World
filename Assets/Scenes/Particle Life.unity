@@ -315,7 +315,7 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 1, g: 1, b: 0, a: 1}
   - {r: 0, g: 1, b: 1, a: 1}
-  forceScale: 0
+  forceScale: 10
   forceMultiplier: []
   minRandomMinRange: 12
   maxRandomMinRange: 32
