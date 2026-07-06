@@ -26,13 +26,14 @@ float _forceScale;
 int _colorCount;
 int _maxRandomMaxRange;
 float2 _boundSize;
+float _particleScale;
 
-int2 offsets[9] =
-        {
-            (-1, 1), (0, 1), (1, 1),
-            (-1, 0), (0,0), (1, 0),
-            (-1, -1), (0, -1), (1, -1)
-        };
+static const int2 offsets[9] =
+{
+    int2(-1, 1), int2(0, 1), int2(1, 1),
+    int2(-1, 0), int2(0, 0), int2(1, 0),
+    int2(-1,-1), int2(0,-1), int2(1,-1)
+};
 
 static const int threads = 64;
 
@@ -40,23 +41,25 @@ int hashfunc(int x, int y)
 {
     int cellX = abs(x) * (x < 0 ? 2377 : 2069);
     int cellY = abs(y) * (y < 0 ? 607 : 733);
-    return fmod(cellX + cellY, _particleCount);
+    return (cellX + cellY) % _particleCount;
 }
 
 int getCellKey(int2 val)
 {
-    return hashfunc(floor(val.x/_maxRandomMaxRange), floor(val.y/_maxRandomMaxRange));
+    return hashfunc(floor(val.x/(float)_maxRandomMaxRange),floor(val.y/ (float)_maxRandomMaxRange));
 }
 
 int2 PositionToCellPos(float2 val)
 {
     //return int2(floor(val.x/_maxRandomMaxRange), floor(val.y/_maxRandomMaxRange));
-    return int2(floor(val/_maxRandomMaxRange));
+    return int2(floor(val/(float)_maxRandomMaxRange));
 }
 [numthreads(64,1,1)]
 void updateSpatialLookup(uint3 id : SV_DispatchThreadID)
 {
+    
     int i = id.x;
+    if (i >= _particleCount) return;
     int cellkey = getCellKey(_positions[i]);
     _spatialLookUp[i] = int2(cellkey, i);
     _startIndices[i] = -1;
@@ -76,6 +79,8 @@ void updateSpatialLookup(uint3 id : SV_DispatchThreadID)
 [numthreads(64,1,1)]
 void updateStartIndices(uint3 id : SV_DispatchThreadID){
     int i = id.x;
+    if (i >= _particleCount) return;
+
 
     int key = _spatialLookUp[i].x;
     int keyprev = (i == 0) ? -1 : _spatialLookUp[i-1].x;
@@ -107,7 +112,7 @@ float ForceFunction(float distance, float attractionFactor, float minDistance)
 
 void HandleBoundsCollisions(int index)
 {
-    int2 halfBoundSize = _boundSize / 2 - float2(_particleCount/2,_particleCount/2);
+    int2 halfBoundSize = _boundSize / 2 - float2(_particleScale/2,_particleScale/2);
     if (abs(_positions[index].x) > halfBoundSize.x)
     {
         _positions[index].x = halfBoundSize.x * (_positions[index].x/abs(_positions[index].x));
@@ -123,6 +128,8 @@ void HandleBoundsCollisions(int index)
 [numthreads(64,1,1)]
 void updateVelocities(uint3 id : SV_DispatchThreadID){
     int i = id.x;
+    if (i >= _particleCount) return;
+
     _velocities[i] *= _frictionFactor;
 
     int2 cell = PositionToCellPos(_positions[i]);
@@ -142,7 +149,7 @@ void updateVelocities(uint3 id : SV_DispatchThreadID){
             float sqrDistance = dot(dir,dir); //dot == sqrmagnitude
 
 
-            int RangeIndex = modf(i, _colorCount + particleIndex % _colorCount * _colorCount);
+            int RangeIndex = i % _colorCount + particleIndex % _colorCount * _colorCount;
 
 
             if(sqrDistance < _maxRange[RangeIndex] * _maxRange[RangeIndex] && 0 < sqrDistance)
@@ -160,9 +167,11 @@ void updateVelocities(uint3 id : SV_DispatchThreadID){
 [numthreads(64,1,1)]
 void updatePosition(uint3 id : SV_DispatchThreadID){
     int i = id.x;
+    if (i >= _particleCount) return;
+
     _positions[i] += _velocities[i] * _timeFactor; //Time.deltaTime; timefactor
     //HandleBoundsCollisions(i);
-    int2 halfBoundSize = _boundSize / 2 - float2(_particleCount/2,_particleCount/2);
+    int2 halfBoundSize = _boundSize / 2 - float2(_particleScale/2,_particleScale/2);
     if (abs(_positions[i].x) > halfBoundSize.x)
     {
         _positions[i].x = halfBoundSize.x * (_positions[i].x/abs(_positions[i].x));

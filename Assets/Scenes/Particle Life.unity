@@ -241,7 +241,7 @@ Camera:
   far clip plane: 2
   field of view: 60
   orthographic: 1
-  orthographic size: 501
+  orthographic size: 550
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345908840}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 998be086f91917d4d9ab2dfd356686e6, type: 3}
   m_Name: 
@@ -322,7 +322,7 @@ MonoBehaviour:
   maxRandomMaxRange: 64
   minRange: []
   maxRange: []
-  boundSize: {x: 1000, y: 1000}
+  boundSize: {x: 1920, y: 1088}
   curspat: 0
 --- !u!4 &1345908842
 Transform:
@@ -346,22 +346,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345908840}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27436ff1009d83947ab7f05998c593ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 80a58f3afb79dd1469faf55769c9da50, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpacialLookuptest
+  m_EditorClassIdentifier: Assembly-CSharp::ComputeCPU
+  computeShader: {fileID: 7200000, guid: 367222455f39c48478bd3daa3388ff88, type: 3}
+  sortShader: {fileID: 7200000, guid: 1e46c0e1035891d44bd9a344df470f3f, type: 3}
+  material: {fileID: 2100000, guid: 53d2ca0aaa039264c98b540d10c2d20f, type: 2}
   mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  ParticleCount: 1000
-  ParticleScale: 1
-  ParticleSpacing: 0
-  minRandomMinRange: 0
-  maxRandomMinRange: 0
-  maxRandomMaxRange: 5
-  colors: []
-  boundSize: {x: 100, y: 100}
-  curspat: 0
+  ParticleCount: 32768
+  ParticleScale: 4
+  ParticleSpacing: 10
+  dampening: 0
+  frictionFactor: 0.04
+  timeFactor: 0.02
+  forceScale: 10
+  minRandomMinRange: 12
+  maxRandomMinRange: 64
+  maxRandomMaxRange: 128
+  colors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  boundSize: {x: 1920, y: 1088}
+  update: 0
+  A: 512
+  B: 1
+  C: 1
 --- !u!1 &1577031382
 GameObject:
   m_ObjectHideFlags: 0

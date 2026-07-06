@@ -46,11 +46,13 @@ public class ComputeCPU : MonoBehaviour
     //Buffers for normal shader
     ComputeBuffer colorsBuffer; //float4[]
 
+
+    public bool update;
     public int A,B,C;
 
     // Get the ID of all buffers and values
     static int positionsId = Shader.PropertyToID("_positions");
-    static int velocitiesId = Shader.PropertyToID("_Velocities");
+    static int velocitiesId = Shader.PropertyToID("_velocities");
     static int AttractionMatrixId = Shader.PropertyToID("_attractionMatrix");
     static int minRangeId = Shader.PropertyToID("_minRange");
     static int maxRangeId = Shader.PropertyToID("_maxRange");
@@ -71,7 +73,16 @@ public class ComputeCPU : MonoBehaviour
     int updateVelocitiesId;
     int updatePositionId;
 
-
+    void BindAll(int k)
+    {
+        computeShader.SetBuffer(k, "_positions", positionsBuffer);
+        computeShader.SetBuffer(k, "_velocities", velocitiesBuffer);
+        computeShader.SetBuffer(k, "_attractionMatrix", AttractionMatrixBuffer);
+        computeShader.SetBuffer(k, "_minRange", minRangeBuffer);
+        computeShader.SetBuffer(k, "_maxRange", maxRangeBuffer);
+        computeShader.SetBuffer(k, "_spatialLookUp", spatialLookUpBuffer);
+        computeShader.SetBuffer(k, "_startIndices", startIndicesBuffer);
+    }
 
 
     void OnEnable()
@@ -80,7 +91,10 @@ public class ComputeCPU : MonoBehaviour
         updateStartIndicesId = computeShader.FindKernel("updateStartIndices");
         updateVelocitiesId = computeShader.FindKernel("updateVelocities");
         updatePositionId = computeShader.FindKernel("updatePosition");
-
+        Debug.Log(updateSpatialLookupId);
+        Debug.Log(updateStartIndicesId);
+        Debug.Log(updateVelocitiesId);
+        Debug.Log(updatePositionId);
 
         int colorCountSqr = colors.Length * colors.Length;
 
@@ -99,7 +113,7 @@ public class ComputeCPU : MonoBehaviour
 
         colorsBuffer = new ComputeBuffer(colors.Length, sizeof(float) * 4);
 
-        computeShader.SetBuffer(updateSpatialLookupId, positionsId, positionsBuffer);
+        /* computeShader.SetBuffer(updateSpatialLookupId, positionsId, positionsBuffer);
         computeShader.SetBuffer(updateSpatialLookupId, spatialLookUpId, spatialLookUpBuffer);
         computeShader.SetBuffer(updateSpatialLookupId, startIndicesId, startIndicesBuffer);
 
@@ -114,10 +128,14 @@ public class ComputeCPU : MonoBehaviour
         computeShader.SetBuffer(updateVelocitiesId, spatialLookUpId, spatialLookUpBuffer);
         computeShader.SetBuffer(updateVelocitiesId, startIndicesId, startIndicesBuffer);
 
-        /* computeShader.SetBuffer(updatePositionId, positionsId, positionsBuffer);
-        computeShader.SetBuffer(updatePositionId, velocitiesId, velocitiesBuffer);
-
-
+        computeShader.SetBuffer(updatePositionId, positionsId, positionsBuffer);
+        computeShader.SetBuffer(updatePositionId, velocitiesId, velocitiesBuffer); */
+        BindAll(updateSpatialLookupId);
+        BindAll(updateStartIndicesId);
+        BindAll(updateVelocitiesId);
+        BindAll(updatePositionId);
+        
+        /* 
         computeShader.SetBuffer(updatePositionId,velocitiesId, velocitiesBuffer);
 
         computeShader.SetBuffer(0,AttractionMatrixId, AttractionMatrixBuffer);
@@ -135,7 +153,10 @@ public class ComputeCPU : MonoBehaviour
         computeShader.SetFloat(colorCountId, colors.Length);
         computeShader.SetFloat(maxRandomMaxRangeId, maxRandomMaxRange);
         computeShader.SetVector(boundSizeId, boundSize);
+        computeShader.SetFloat("_particleScale", ParticleScale);
 
+        sortShader.SetBuffer(0, "_values", spatialLookUpBuffer);
+        sortShader.SetInt("_numValues", ParticleCount);
 
         Vector2[] positions = new Vector2[ParticleCount];
         float[] attractionMatrix = new float[colorCountSqr];
@@ -190,10 +211,6 @@ public class ComputeCPU : MonoBehaviour
 
     void Sort()
     {
-        sortShader.SetBuffer(0, "Values", spatialLookUpBuffer);
-        sortShader.SetInt("_numValues", ParticleCount);
-
-
         int numPairs = Mathf.NextPowerOfTwo(ParticleCount)/2;
         int numStages = (int)Mathf.Log(numPairs *2, 2);
 
@@ -214,10 +231,18 @@ public class ComputeCPU : MonoBehaviour
 
     void Update()
     {
-
+        if (update)
+        {
+            computeShader.SetFloat(frictionFactorId, frictionFactor);
+            computeShader.SetFloat(timeFactorId, timeFactor);
+            computeShader.SetFloat(forceScaleId, forceScale);
+            computeShader.SetVector(boundSizeId, boundSize);
+            computeShader.SetFloat("_particleScale", ParticleScale);
+            update = false;
+        }
         runSiumulationStep();
         RenderParams rp = new RenderParams(material);
-        rp.worldBounds = new Bounds(Vector3.zero, 10000*Vector3.one); // use tighter bounds
+        rp.worldBounds = new Bounds(Vector3.zero, 100000000*Vector3.one); // use tighter bounds
         rp.matProps = new MaterialPropertyBlock();
         rp.matProps.SetMatrix("_ObjectToWorld", Matrix4x4.Translate(new Vector3(-4f, 0, 0)));
         rp.matProps.SetFloat("_NumInstances", (float)ParticleCount);

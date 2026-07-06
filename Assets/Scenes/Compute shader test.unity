@@ -155,8 +155,8 @@ Camera:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -180,8 +180,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 2001
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -416,21 +416,24 @@ MonoBehaviour:
   sortShader: {fileID: 7200000, guid: 1e46c0e1035891d44bd9a344df470f3f, type: 3}
   material: {fileID: 2100000, guid: 53d2ca0aaa039264c98b540d10c2d20f, type: 2}
   mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  ParticleCount: 50
-  ParticleScale: 1
-  ParticleSpacing: 1
+  ParticleCount: 32768
+  ParticleScale: 4
+  ParticleSpacing: 10
   dampening: 1
-  frictionFactor: 1
-  timeFactor: 1
-  forceScale: 1
-  minRandomMinRange: 1
-  maxRandomMinRange: 2
-  maxRandomMaxRange: 3
+  frictionFactor: 0.04
+  timeFactor: 0.02
+  forceScale: 10
+  minRandomMinRange: 12
+  maxRandomMinRange: 64
+  maxRandomMaxRange: 128
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
-  boundSize: {x: 0, y: 0}
-  A: 1
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 0, a: 1}
+  boundSize: {x: 10000, y: 10000}
+  update: 0
+  A: 512
   B: 1
   C: 1
 --- !u!4 &1525736295
