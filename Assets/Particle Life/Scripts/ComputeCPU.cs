@@ -167,10 +167,15 @@ public class ComputeCPU : MonoBehaviour
         int particlesPerCol = (ParticleCount -1) / particlesPerRow + 1;
         float spacing = ParticleScale + ParticleSpacing;
 
+        float minX = -boundSize.x/2;
+        float maxX = boundSize.x/2;
+        float minY = -boundSize.y/2;
+        float maxY = boundSize.y/2;
+
         for(int i = 0; i < ParticleCount; i++)
         {
-            float x = (i % particlesPerRow - particlesPerRow / 2 + 0.5f) * spacing;
-            float y = (i / particlesPerCol - particlesPerCol / 2f + 0.5f) * spacing;
+            float x = UnityEngine.Random.Range(minX,maxX); //(i % particlesPerRow - particlesPerRow / 2 + 0.5f) * spacing;
+            float y = UnityEngine.Random.Range(minY,maxY); //(i / particlesPerCol - particlesPerCol / 2f + 0.5f) * spacing;
 
             positions[i] = new Vector2(x,y);
         }
