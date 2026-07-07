@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEditor.Embree;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -24,6 +25,7 @@ public class ComputeCPU : MonoBehaviour
     public float minRandomMinRange;
     public float maxRandomMinRange;
     public float maxRandomMaxRange;
+    public int colorCount;
 
     public Color[] colors;
 
@@ -48,6 +50,8 @@ public class ComputeCPU : MonoBehaviour
 
 
     public bool update;
+    public bool updateRendering;
+    public bool pause;
     public int A,B,C;
 
     // Get the ID of all buffers and values
@@ -96,7 +100,7 @@ public class ComputeCPU : MonoBehaviour
         Debug.Log(updateVelocitiesId);
         Debug.Log(updatePositionId);
 
-        int colorCountSqr = colors.Length * colors.Length;
+        int colorCountSqr = colorCount * colorCount;
 
         positionsBuffer = new ComputeBuffer(ParticleCount, sizeof(float) * 2);
         velocitiesBuffer = new ComputeBuffer(ParticleCount, sizeof(float) * 2);
@@ -111,7 +115,7 @@ public class ComputeCPU : MonoBehaviour
 
         startIndicesBuffer = new ComputeBuffer(ParticleCount, sizeof(int));
 
-        colorsBuffer = new ComputeBuffer(colors.Length, sizeof(float) * 4);
+        colorsBuffer = new ComputeBuffer(colorCount, sizeof(float) * 4);
 
         /* computeShader.SetBuffer(updateSpatialLookupId, positionsId, positionsBuffer);
         computeShader.SetBuffer(updateSpatialLookupId, spatialLookUpId, spatialLookUpBuffer);
@@ -150,7 +154,7 @@ public class ComputeCPU : MonoBehaviour
         computeShader.SetFloat(frictionFactorId, frictionFactor);
         computeShader.SetFloat(timeFactorId, timeFactor);
         computeShader.SetFloat(forceScaleId, forceScale);
-        computeShader.SetFloat(colorCountId, colors.Length);
+        computeShader.SetFloat(colorCountId, colorCount);
         computeShader.SetFloat(maxRandomMaxRangeId, maxRandomMaxRange);
         computeShader.SetVector(boundSizeId, boundSize);
         computeShader.SetFloat("_particleScale", ParticleScale);
@@ -163,9 +167,9 @@ public class ComputeCPU : MonoBehaviour
         float[] minRange = new float[colorCountSqr];
         float[] maxRange = new float[colorCountSqr];
 
-        int particlesPerRow = (int)math.sqrt(ParticleCount) + 1;
+        /* int particlesPerRow = (int)math.sqrt(ParticleCount) + 1;
         int particlesPerCol = (ParticleCount -1) / particlesPerRow + 1;
-        float spacing = ParticleScale + ParticleSpacing;
+        float spacing = ParticleScale + ParticleSpacing; */
 
         float minX = -boundSize.x/2;
         float maxX = boundSize.x/2;
@@ -181,21 +185,42 @@ public class ComputeCPU : MonoBehaviour
         }
 
 
-        for(int i=0; i<colors.Length; i++)
+        for(int i=0; i<colorCount; i++)
         {
-            for(int j=0; j<colors.Length; j++)
+            for(int j=0; j<colorCount; j++)
             {
-                int index = i + j * colors.Length;
+                int index = i + j * colorCount;
                 attractionMatrix[index] = UnityEngine.Random.Range(-1f, 1f);
                 minRange[index] = UnityEngine.Random.Range(minRandomMinRange, maxRandomMinRange);
                 maxRange[index] = UnityEngine.Random.Range(maxRandomMinRange, maxRandomMaxRange);
             }
         }
+
+        if (colors.Length != colorCount)
+        {
+            Color[] temp = colors;
+            colors = new Color[colorCount];
+            
+            for(int i=0; i<colorCount; i++)
+            {
+                if (i < temp.Length)
+                {
+                    colors[i]=temp[i];
+                }
+                else
+                {
+                    colors[i] = UnityEngine.Random.ColorHSV(0,1,1,1,1,1);
+                }
+            }
+        }
+
+
         positionsBuffer.SetData(positions);
         AttractionMatrixBuffer.SetData(attractionMatrix);
         minRangeBuffer.SetData(minRange);
         maxRangeBuffer.SetData(maxRange);
         colorsBuffer.SetData(colors);
+        A = ParticleCount/64;
 
     }
     void OnDisable()
@@ -229,7 +254,7 @@ public class ComputeCPU : MonoBehaviour
                 sortShader.SetInt("_groupHeight", groupHeight);
                 sortShader.SetInt("_stepIndex", stepIndex);
 
-                sortShader.Dispatch(0,A,B,C);
+                sortShader.Dispatch(0,ParticleCount/128,B,C);
             }
         }
     }
@@ -245,7 +270,13 @@ public class ComputeCPU : MonoBehaviour
             computeShader.SetFloat("_particleScale", ParticleScale);
             update = false;
         }
-        runSiumulationStep();
+        if (updateRendering)
+        {
+            colorsBuffer.SetData(colors);
+            updateRendering = false;
+        }
+
+        if (!pause) runSiumulationStep();
         RenderParams rp = new RenderParams(material);
         rp.worldBounds = new Bounds(Vector3.zero, 100000000*Vector3.one); // use tighter bounds
         rp.matProps = new MaterialPropertyBlock();
@@ -264,5 +295,9 @@ public class ComputeCPU : MonoBehaviour
         computeShader.Dispatch(updateStartIndicesId, A,B,C);
         computeShader.Dispatch(updateVelocitiesId, A,B,C);
         computeShader.Dispatch(updatePositionId, A,B,C);
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(Vector2.zero, boundSize);
     }
 }

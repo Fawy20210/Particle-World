@@ -8,7 +8,7 @@ int _groupWidth;
 int _groupHeight;
 int _stepIndex;
 
-[numthreads(64, 1, 1)]
+[numthreads(128, 1, 1)]
 void Sort (uint3 id : SV_DispatchThreadID)
 {
 	uint i = id.x;
