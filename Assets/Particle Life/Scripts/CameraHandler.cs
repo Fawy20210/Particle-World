@@ -1,7 +1,9 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.Rendering;
 
 public class CameraHandler : MonoBehaviour
 {
@@ -11,10 +13,13 @@ public class CameraHandler : MonoBehaviour
     InputAction MoveMouse;
     InputAction ScrollMouse;
     public float BoundsScaleX;
+    public float speed;
+    float startSize;
+    float Zoom = 1;
     void Start()
     {
         camera = GetComponent<Camera>();
-        camera.orthographicSize = Screen.width/2.0f * BoundsScaleX;
+        startSize = camera.orthographicSize = Screen.width/2.0f * BoundsScaleX;
         MoveMouse = InputSystem.actions.FindAction("MoveMouse");
         ScrollMouse = InputSystem.actions.FindAction("ScrollMouse");
     }
@@ -24,8 +29,18 @@ public class CameraHandler : MonoBehaviour
     {
         Vector2 Movement = MoveMouse.ReadValue<Vector2>();
         Vector2 Scroll = ScrollMouse.ReadValue<Vector2>();
-        Debug.Log((Scroll,EventSystem.current.IsPointerOverGameObject()));
-        if(!EventSystem.current.IsPointerOverGameObject()) camera.orthographicSize += camera.orthographicSize*(Scroll.y/10);
+        bool IsClicked = Mouse.current.leftButton.isPressed;
+        Zoom += Zoom * Scroll.y/10;
+        if(!EventSystem.current.IsPointerOverGameObject()) camera.orthographicSize = startSize * Zoom;
+
+        float screenHeight = camera.orthographicSize * 2;
+        float screenWidth = screenHeight * Screen.width/Screen.height;
+
+        Vector3 newpos = new Vector3(Movement.x/screenWidth,Movement.y/screenHeight,0);
+        //Vector3 newpos = new Vector3(Movement.x,Movement.y,0);
+        //Debug.Log((Movement,newpos,IsClicked,Zoom,screenWidth,screenHeight));
+        if(IsClicked) camera.transform.position -= newpos*Zoom*speed*Zoom;//(camera.orthographicSize/startSize) 
+
     
     }
 }
