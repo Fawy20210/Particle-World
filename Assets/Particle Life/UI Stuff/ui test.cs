@@ -29,7 +29,10 @@ public class uitest : MonoBehaviour
 
     public Transform LeftCollapsable;
     public Transform LeftCollapseButtonImage;
+    public Transform RightCollapsable;
+    public Transform RightCollapseButtonImage;
     bool IsLeftCollapsed = false;
+    bool IsRightCollapsed = false;
     void Awake()
     {
         computeCPU.ParticleCount = int.Parse(ParticleCountInput.text);
@@ -159,6 +162,21 @@ public class uitest : MonoBehaviour
             LeftCollapsable.position -= new Vector3(300,0,0);
             LeftCollapseButtonImage.Rotate(0,0,180);
             IsLeftCollapsed = true;
+        }
+    }
+    public void CollapseRight()
+    {
+        if (IsRightCollapsed)
+        {
+            RightCollapsable.position -= new Vector3(300,0,0);
+            RightCollapseButtonImage.Rotate(0,0,180);
+            IsRightCollapsed = false;
+        }
+        else
+        {
+            RightCollapsable.position += new Vector3(300,0,0);
+            RightCollapseButtonImage.Rotate(0,0,180);
+            IsRightCollapsed = true;
         }
     }
 }
