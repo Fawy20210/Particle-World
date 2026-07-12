@@ -37,8 +37,8 @@ public class uitest : MonoBehaviour
         computeCPU.maxRandomMinRange = int.Parse(maxRandomMinRangeInput.text);
         computeCPU.maxRandomMaxRange = int.Parse(maxRandomMaxRangeInput.text);
         computeCPU.colorCount = int.Parse(ColorCountInput.text);
-        computeCPU.boundSize.x = 1920*int.Parse(boundsXInput.text);
-        computeCPU.boundSize.y = 1088*int.Parse(boundsYInput.text);
+        computeCPU.boundSize.x = Screen.width*float.Parse(boundsXInput.text);
+        computeCPU.boundSize.y = Screen.height*float.Parse(boundsYInput.text);
         computeCPU.ParticleScale = float.Parse(ParticleScaleInput.text);
         computeCPU.updateRendering = true;
         computeCPU.frictionFactor = float.Parse(frictionFactorInput.text);

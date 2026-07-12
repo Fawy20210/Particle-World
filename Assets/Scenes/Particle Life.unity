@@ -15101,7 +15101,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1424723935}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.65252453
+  m_Size: 0.65356314
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18566,7 +18566,7 @@ GameObject:
   - component: {fileID: 1286567115}
   - component: {fileID: 1286567119}
   m_Layer: 0
-  m_Name: Pixel Perfect Camera
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18694,6 +18694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8872f081eec6efa4694f89dfef70681b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  computeCPU: {fileID: 1345908843}
+  BoundsScaleX: 1
 --- !u!1 &1291479865
 GameObject:
   m_ObjectHideFlags: 0
@@ -19853,10 +19855,10 @@ MonoBehaviour:
   dampening: 0
   frictionFactor: 0.7
   timeFactor: 0.02
-  forceScale: 10
+  forceScale: 1
   minRandomMinRange: 12
-  maxRandomMinRange: 64
-  maxRandomMaxRange: 128
+  maxRandomMinRange: 32
+  maxRandomMaxRange: 64
   colorCount: 0
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
@@ -31717,7 +31719,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1662489442}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5517169
+  m_Size: 0.5525951
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
