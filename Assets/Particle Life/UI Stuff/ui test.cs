@@ -9,6 +9,7 @@ using ColorUtility = UnityEngine.ColorUtility;
 public class uitest : MonoBehaviour
 {
     public ComputeCPU computeCPU;
+    public CameraHandler cameraHandler;
     public Transform ColorParent;
     public GameObject ColorObjects;
     public MatrixLayout AttractionMatrixLayout;
@@ -25,7 +26,9 @@ public class uitest : MonoBehaviour
     public TMP_InputField timeFactorInput;
     public TMP_InputField forceScaleInput;
 
+    public TMP_InputField CameraSpeed;
     public TMP_InputField ParticleScaleInput;
+
 
     public Transform LeftCollapsable;
     public Transform LeftCollapseButtonImage;
@@ -179,4 +182,8 @@ public class uitest : MonoBehaviour
             IsRightCollapsed = true;
         }
     }
+    public void UpdateCameraSpeed()
+    {
+        cameraHandler.speed = float.Parse(CameraSpeed.text);
+    } 
 }
