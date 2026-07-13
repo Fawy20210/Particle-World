@@ -32,7 +32,7 @@ public class CameraHandler : MonoBehaviour
         bool IsClicked = Mouse.current.leftButton.isPressed;
         if(!EventSystem.current.IsPointerOverGameObject())
         {
-            Zoom += Zoom * Scroll.y/10;
+            Zoom -= Zoom * Scroll.y/10;
             camera.orthographicSize = startSize * Zoom;
 
             float screenHeight = camera.orthographicSize * 2;
