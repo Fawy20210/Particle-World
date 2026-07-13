@@ -186,4 +186,12 @@ public class uitest : MonoBehaviour
     {
         cameraHandler.speed = float.Parse(CameraSpeed.text);
     } 
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
 }
