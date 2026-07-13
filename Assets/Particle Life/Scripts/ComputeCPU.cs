@@ -120,7 +120,6 @@ public class ComputeCPU : MonoBehaviour
         spatialLookUpBuffer = new ComputeBuffer(ParticleCount, sizeof(int) * 2);
         startIndicesBuffer = new ComputeBuffer(ParticleCount, sizeof(int));
 
-        startIndicesBuffer = new ComputeBuffer(ParticleCount, sizeof(int));
 
         colorsBuffer = new ComputeBuffer(colorCount, sizeof(float) * 4);
 
