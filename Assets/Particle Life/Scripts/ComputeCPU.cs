@@ -102,10 +102,10 @@ public class ComputeCPU : MonoBehaviour
         updateStartIndicesId = computeShader.FindKernel("updateStartIndices");
         updateVelocitiesId = computeShader.FindKernel("updateVelocities");
         updatePositionId = computeShader.FindKernel("updatePosition");
-        Debug.Log(updateSpatialLookupId);
+        /* Debug.Log(updateSpatialLookupId);
         Debug.Log(updateStartIndicesId);
         Debug.Log(updateVelocitiesId);
-        Debug.Log(updatePositionId);
+        Debug.Log(updatePositionId); */
 
         int colorCountSqr = colorCount * colorCount;
 
