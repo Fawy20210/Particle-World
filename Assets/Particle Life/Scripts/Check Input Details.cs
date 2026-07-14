@@ -82,7 +82,7 @@ public class CheckInputDetails : MonoBehaviour
             } 
             else if (inputField == MidInput)
             {
-                if(value < MinValue)
+                if(value <= MinValue)
                 {
                     if(MaxValue != MinValue+1)
                     {
@@ -108,7 +108,7 @@ public class CheckInputDetails : MonoBehaviour
             }
             else
             {
-                if(value < MidValue)
+                if(value <= MidValue)
                 {
                     MaxInput.text = (MidValue+1).ToString();
                 }
