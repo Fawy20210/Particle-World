@@ -4617,7 +4617,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 585679319}
+        m_TargetAssemblyTypeName: CheckInputRangeMatrixes, Assembly-CSharp
+        m_MethodName: DecideType
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 245418588}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -8308,6 +8320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 585679317}
   - component: {fileID: 585679318}
+  - component: {fileID: 585679319}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -8351,6 +8364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatrixLayout
   computeCPU: {fileID: 1345908843}
+  checkInputMatrixes: {fileID: 585679319}
   ContentFieldObject: {fileID: 245418586}
   ColorFieldObject: {fileID: 882315612}
   AttractionEditField: {fileID: 827893956}
@@ -8365,6 +8379,19 @@ MonoBehaviour:
   TopColorsGridMax: {fileID: 2132458450}
   LeftColorsGridMax: {fileID: 1278748406}
   ContentGridMax: {fileID: 964780713}
+--- !u!114 &585679319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585679316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee97958d711302249a376258173faff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckInputRangeMatrixes
+  computeCPU: {fileID: 1345908843}
 --- !u!1 &589599017
 GameObject:
   m_ObjectHideFlags: 0
@@ -12077,7 +12104,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 585679318}
+        m_TargetAssemblyTypeName: MatrixLayout, Assembly-CSharp
+        m_MethodName: UpdateAttractionFieldCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -15849,7 +15888,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1424723935}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.58293575
+  m_Size: 0.46281722
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17985,7 +18024,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 585679318}
+        m_TargetAssemblyTypeName: MatrixLayout, Assembly-CSharp
+        m_MethodName: UpdateMinFieldCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -21158,7 +21209,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 585679318}
+        m_TargetAssemblyTypeName: MatrixLayout, Assembly-CSharp
+        m_MethodName: UpdateMaxFieldCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -31102,6 +31165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::uitest
   computeCPU: {fileID: 1345908843}
   cameraHandler: {fileID: 1286567119}
+  checkInputMatrixes: {fileID: 585679319}
   ColorParent: {fileID: 675482011}
   ColorObjects: {fileID: 2139670870}
   AttractionMatrixLayout: {fileID: 585679318}
@@ -33228,7 +33292,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1662489442}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.49287882
+  m_Size: 0.39131725
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

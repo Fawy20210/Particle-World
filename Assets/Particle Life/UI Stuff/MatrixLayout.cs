@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MatrixLayout : MonoBehaviour
 {
     public ComputeCPU computeCPU;
+    public CheckInputMatrixes checkInputMatrixes;
     public GameObject ContentFieldObject;
     public GameObject ColorFieldObject;
 
@@ -228,6 +229,30 @@ public class MatrixLayout : MonoBehaviour
     public void UpdateMaxField()
     {
         CurrentlySelectedMax.text = MaxEditField.text;
+    }
+    public void UpdateAttractionFieldCheck()
+    {
+        if (AttractionEditField.text != "")
+        {
+            CurrentlySelectedAttraction.text = AttractionEditField.text;
+        }
+        else
+        {
+            CurrentlySelectedAttraction.text = "0";
+            AttractionEditField.text = "0";
+        }
+    }
+    public void UpdateMinFieldCheck()
+    {
+        string text = checkInputMatrixes.GetValidMinRangesValue(MinEditField.text);
+        MinEditField.text = text;
+        CurrentlySelectedMin.text = text;
+    }
+    public void UpdateMaxFieldCheck()
+    {
+        string text = checkInputMatrixes.GetValidMaxRangesValue(MaxEditField.text);
+        MaxEditField.text = text;
+        CurrentlySelectedMax.text = text;
     }
 
 

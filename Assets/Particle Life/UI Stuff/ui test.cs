@@ -10,6 +10,7 @@ public class uitest : MonoBehaviour
 {
     public ComputeCPU computeCPU;
     public CameraHandler cameraHandler;
+    public CheckInputMatrixes checkInputMatrixes;
     public Transform ColorParent;
     public GameObject ColorObjects;
     public MatrixLayout AttractionMatrixLayout;
@@ -149,6 +150,7 @@ public class uitest : MonoBehaviour
 
         computeCPU.enabled = false;
         computeCPU.enabled = true;
+        checkInputMatrixes.UpdateValues();
         updateUIColors();
     }
 
@@ -185,7 +187,7 @@ public class uitest : MonoBehaviour
     public void UpdateCameraSpeed()
     {
         cameraHandler.speed = float.Parse(CameraSpeed.text);
-    } 
+    }
     public void QuitGame()
     {
         #if UNITY_EDITOR
