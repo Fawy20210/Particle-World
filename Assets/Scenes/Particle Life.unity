@@ -21072,7 +21072,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1345908842}
   - component: {fileID: 1345908843}
-  - component: {fileID: 1345908841}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -21080,40 +21079,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1345908841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345908840}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 998be086f91917d4d9ab2dfd356686e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HandleForces
-  mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  ParticleCount: 4000
-  ParticleScale: 4
-  ParticleSpacing: 4
-  dampening: 0
-  frictionFactor: 0.04
-  timeFactor: 0.02
-  colors:
-  - {r: 0, g: 0, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
-  - {r: 1, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  forceScale: 10
-  forceMultiplier: []
-  minRandomMinRange: 12
-  maxRandomMinRange: 32
-  maxRandomMaxRange: 64
-  minRange: []
-  maxRange: []
-  boundSize: {x: 1920, y: 1088}
-  curspat: 0
 --- !u!4 &1345908842
 Transform:
   m_ObjectHideFlags: 0
