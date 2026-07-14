@@ -15940,7 +15940,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1424723935}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.58293575
+  m_Size: 0.5767039
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -21164,7 +21164,8 @@ MonoBehaviour:
   update: 0
   updateRendering: 0
   pause: 0
-  A: 512
+  ThreadCount: 0
+  ThreadCountSecondary: 0
   B: 1
   C: 1
   attractionMatrix: []
@@ -33392,7 +33393,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1662489442}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.49287882
+  m_Size: 0.48760974
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

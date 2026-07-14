@@ -51,7 +51,8 @@ public class ComputeCPU : MonoBehaviour
     public bool update;
     public bool updateRendering;
     public bool pause;
-    public int A,B,C;
+    public int ThreadCount, ThreadCountSecondary;
+    public int B,C;
     public float[] attractionMatrix;
     public float[] minRange;
     public float[] maxRange;
@@ -200,7 +201,9 @@ public class ComputeCPU : MonoBehaviour
         minRangeBuffer.SetData(minRange);
         maxRangeBuffer.SetData(maxRange);
         colorsBuffer.SetData(colors);
-        A = ParticleCount/64;
+
+        ThreadCount = Mathf.CeilToInt(ParticleCount/64.0f);
+        ThreadCountSecondary = Mathf.CeilToInt(ParticleCount/128.0f);
 
         rp = new RenderParams(material);
         rp.worldBounds = new Bounds(Vector3.zero, 100000000*Vector3.one); // use tighter bounds
@@ -243,7 +246,7 @@ public class ComputeCPU : MonoBehaviour
                 sortShader.SetInt("_groupHeight", groupHeight);
                 sortShader.SetInt("_stepIndex", stepIndex);
 
-                sortShader.Dispatch(0,ParticleCount/128,B,C);
+                sortShader.Dispatch(0,ThreadCountSecondary,B,C);
             }
         }
     }
@@ -290,11 +293,11 @@ public class ComputeCPU : MonoBehaviour
 
     void runSiumulationStep()
     {
-        computeShader.Dispatch(updateSpatialLookupId, A,B,C);
+        computeShader.Dispatch(updateSpatialLookupId, ThreadCount,B,C);
         Sort();
-        computeShader.Dispatch(updateStartIndicesId, A,B,C);
-        computeShader.Dispatch(updateVelocitiesId, A,B,C);
-        computeShader.Dispatch(updatePositionId, A,B,C);
+        computeShader.Dispatch(updateStartIndicesId, ThreadCount,B,C);
+        computeShader.Dispatch(updateVelocitiesId, ThreadCount,B,C);
+        computeShader.Dispatch(updatePositionId, ThreadCount,B,C);
     }
     void OnDrawGizmos()
     {
