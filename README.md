@@ -27,3 +27,13 @@ A particle simulator, that by using simple interaction rules, can create complex
 1. Unzip the downloaded file.
 2. Open the unziped folder.
 3. Execute `ParticleWorld.x86_64`
+
+## Features
+
+- Runs on your GPU using compute shaders.
+- Ability to change Simulation, Physics and Rendering Parameters.
+- Ability to view and change the values of the matrixes for the three interaction parameters.
+- Input validation.
+- Collapsable UI Panels.
+- Pause button to pause the simulation.
+- An FPS counter.
