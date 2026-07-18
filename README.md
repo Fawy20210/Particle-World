@@ -44,6 +44,14 @@ A particle simulator, that by using simple interaction rules, can create complex
 **Move Camera:** Left click anywhere there isn't UI, and move around your mouse.  
 **Zoom:** Scroll with your mouse wheel anywhere there isn't UI.
 
+### Parameters
+**Simulation Details:**  
+**Amount of Simulated Particles:** How many particles get simulated.  
+**Min inner Range:** The lower bound used by the random number generator for the Min Range Matrix.  
+**Max inner Range / Min outer Range:** The upper bound use by the random number generator for the Min Range Matrix, and a the lower bound used by the random number generator for the Max Range Matrix.  
+**Max outer Range:** The upper bound use by the random number generator for the Max Range Matrix.  
+**Amount of Colors:** How many different colors there are, which influences the matrixes, and the appereance of the particles.  
+**Border Scale X & Border Scale Y:** How big the area the particles can move in is, proportional to your screen size in pixels.
 
 
 
