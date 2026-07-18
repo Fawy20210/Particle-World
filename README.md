@@ -37,3 +37,14 @@ A particle simulator, that by using simple interaction rules, can create complex
 - Collapsable UI Panels.
 - Pause button to pause the simulation.
 - An FPS counter.
+
+## Controls & Parameters
+
+### Controls
+**Move Camera:** Left click anywhere there isn't UI, and move around your mouse.  
+**Zoom:** Scroll with your mouse wheel anywhere there isn't UI.
+
+
+
+
+
