@@ -1,14 +1,14 @@
 # Particle World
 A particle simulator, that by using simple interaction rules, can create complex patterns.
 
-![alt text](README-Assets\README-Project-Showcase.gif)
+![alt text](README-Assets/README-Project-Showcase.gif)
 [***TRY IT OUT***](https://fawy2020.itch.io/particle-world)
 
 ## Quick Start
 ### Windows
 **Download**
 - [Download on itch.io](fawy2020.itch.io/particle-world)  
-- [Download from Github (latest release)](Releases\Windows\ParticleWorld-0.3.zip)
+- [Download from Github (latest release)](Releases/Windows/ParticleWorld-0.3.zip)
 
 **Launch**
 1. Unzip the downloaded file.
