@@ -3,3 +3,27 @@ A particle simulator, that by using simple interaction rules, can create complex
 
 ![alt text](20260718-1551-52.4415430.gif)
 [***TRY IT OUT***](https://fawy2020.itch.io/particle-world)
+
+## Quick Start
+### Windows
+**Download**
+- [Download on itch.io](fawy2020.itch.io/particle-world)  
+- [Download from Github (latest release)](Releases\Windows\ParticleWorld-0.3.zip)
+
+**Launch**
+1. Unzip the downloaded file.
+2. Open the unziped folder.
+3. Execute `Particle World.exe`
+
+
+### Linux
+***Linux files are provided for download, but are not tested, so they might not work or have issues.***  
+***The following instructions may not be accurate, but I assume they should be.***
+
+**Download**
+- [Download from Github (latest release)](Releases\Linux\ParticleWorld-linux-0.3.zip)
+
+**Launch**
+1. Unzip the downloaded file.
+2. Open the unziped folder.
+3. Execute `ParticleWorld.x86_64`
