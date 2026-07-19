@@ -38,13 +38,14 @@ A particle simulator, that by using simple interaction rules, can create complex
 - Pause button to pause the simulation.
 - An FPS counter.
 
-## Controls & Parameters
+## Controls
 
-### Controls
 **Move Camera:** Left click anywhere there isn't UI, and move around your mouse.  
 **Zoom:** Scroll with your mouse wheel anywhere there isn't UI.
 
-### Parameters
+## Parameters 
+### Short Variant
+
 **Simulation Details:**  
 **Amount of Simulated Particles:** How many particles get simulated.  
 **Min inner Range:** The lower bound used by the random number generator for the Min Range Matrix.  
@@ -53,6 +54,23 @@ A particle simulator, that by using simple interaction rules, can create complex
 **Amount of Colors:** How many different colors there are, which influences the matrixes, and the appereance of the particles.  
 **Border Scale X & Border Scale Y:** How big the area the particles can move in is, proportional to your screen size in pixels.
 
+**Physics Details:**
+<details>
+<summary> <b>Friction Factor:</b> How much velocity the particles keep each time step. </summary>
+ Bigger value -> -Stability & +Particle speed.<br>
+ Smaller value -> +Stability & -Particle speed.
+</details> 
 
+
+<details>
+<summary> <b>Time Factor:</b> The size of each time step. </summary>
+ Bigger steps -> -Accuracy & +Simulation speed.<br>
+ Smaller steps -> +Accuracy & -Simulation speed.
+</details>
+<details>
+<summary> <b>Force Scale:</b> Scales the interaction forces. </summary>
+ Bigger value -> -Stability & +Amount of Movement.<br>
+ Smaller value -> +Stability & -Amount of Movement.
+</details>
 
 
