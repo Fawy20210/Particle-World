@@ -33,7 +33,7 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
                 //float4 wpos = mul(_ObjectToWorld, v.vertex*_particleScale+float4(_positions[instanceID], 0, 0)); //v.vertex + float4(instanceID, 0, 0, 0)
                 float4 wpos = float4(v.vertex.xy * _particleScale + _positions[instanceID], 0 /* v.vertex.z * _particleScale + instanceID/100 */, 1);
                 o.pos = mul(UNITY_MATRIX_VP, wpos); //(x,y,z,scale)
-                o.color = _colors[fmod(instanceID, colorCount)]; //float4(1/colorCount * (instanceID % colorCount) , 0.0f, 0.0f, 0.0f)
+                o.color = _colors[instanceID % colorCount]; //float4(1/colorCount * (instanceID % colorCount) , 0.0f, 0.0f, 0.0f)
                 return o;
             }
 
