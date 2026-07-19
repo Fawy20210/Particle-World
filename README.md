@@ -12,7 +12,7 @@ Every Particle has a color, and that color defines how it interacts with other p
 ### Windows
 **Download**
 - [Download on itch.io](https://fawy2020.itch.io/particle-world)  
-- [Download from Github (latest release)](Releases/Windows/ParticleWorld-0.3.zip)
+- [Download from Github (latest release)](https://github.com/Fawy20210/Particle-World/releases/latest/download/ParticleWorld-1.0.zip)
 
 **Launch**
 1. Unzip the downloaded file.
@@ -25,7 +25,7 @@ Every Particle has a color, and that color defines how it interacts with other p
 ***The following instructions may not be accurate, but I assume they should be.***
 
 **Download**
-- [Download from Github (latest release)](Releases\Linux\ParticleWorld-linux-0.3.zip)
+- [Download from Github (latest release)](https://github.com/Fawy20210/Particle-World/releases/latest/download/ParticleWorld-linux-1.0.zip)
 
 **Launch**
 1. Unzip the downloaded file.
