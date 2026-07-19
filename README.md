@@ -104,7 +104,22 @@ The matrixes show the interaction parameters for every color with every color, a
 </details>
 
 
+## Some insights
 
+<details>
+<summary> <b>What is spatial partitioning, and why did I use it?</b> </summary>
 
+Spatial partitioning is a method where you partition a space, into smaller subspaces of a certain size, to be able to efficently find objects that are in a certain area of your space.   
+
+Before implementing spatial partitioning, every particle had to check for every other particle whether it was close enough to be affected, which is pretty slow with large amounts of particles.  
+But by partitioning space into squares with the size of the maximum possible range, it only needs to check the square it is in, and the ones around it, ignoring all particles too far away to even remotly be close enough, and greatly increasing performance.
+</details>
+
+<details>
+<summary> <b>Why did I choose to run the computations on the GPU?</b> </summary>
+
+I chose to run the computation on the GPU because GPUs are normally really good at doing things in parallel, which is great if you need to compute many things that are pretty much the same, and the CPU would be to slow to do the same.
+ 
+</details>
 
 
