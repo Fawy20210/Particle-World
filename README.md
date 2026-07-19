@@ -69,7 +69,9 @@ Every Particle has a color, and that color defines how it interacts with other p
 <summary> <b>Time Factor:</b> The size of each time step. </summary>
  Bigger steps -> -Accuracy & +Simulation speed.<br>
  Smaller steps -> +Accuracy & -Simulation speed.
-</details><details>
+</details>
+
+<details>
 <summary> <b>Force Scale:</b> Scales the interaction forces. </summary>
  Bigger value -> -Stability & +Amount of Movement.<br>
  Smaller value -> +Stability & -Amount of Movement.
@@ -85,21 +87,24 @@ Every Particle has a color, and that color defines how it interacts with other p
 ### Matrix Details:
 The matrixes show the interaction parameters for every color with every color, and let you change them.
 
-</details><details>
+<details>
 <summary> <b>Attraction Matrix:</b> How different colors attract each other when in an valid range. </summary>
  Positive values -> Attraction.<br>
  Negativ values -> Repulsion.
 </details>
 
-</details><details>
+<details>
 <summary> <b>Min Range Matrix:</b> The closest a color can be to another color / the lower bounds of the valid range. </summary>
  A color closer than their respective Min Range value to another color, always gets repelled by that other color.
 </details>
 
-</details><details>
+<details>
 <summary> <b>Max Range Matrix:</b> The biggest distance a color can be to another color to still be affected by it / the upper bounds of the valid range. </summary>
  A color further apart than their respective Max Range value with another color, isn't affected by that other color.
 </details>
+
+
+
 
 
 
