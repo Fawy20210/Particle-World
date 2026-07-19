@@ -127,3 +127,6 @@ I chose to run the computation on the GPU because GPUs are normally really good 
 I used [Sandbox Science's implementation of particle life](https://sandbox-science.com/particle-life) as inspiration, mostly for the UI, and as a reference to see how the simulation should roughly work.
 
 I used Sebastian Lagues [Fluid-Sim](https://github.com/SebLague/Fluid-Sim/) and his videos about making it as references on how to implement certain things, like spatial partitioning, and used his [BitonicMergeSort implementation](https://github.com/SebLague/Fluid-Sim/tree/Episode-01/Assets/Scripts/Compute%20Helpers/GPU%20Sort/Resources) for sorting using the GPU.
+
+## Demo
+https://github.com/user-attachments/assets/94ea0b58-0f42-49e4-91ed-3ada0b6a1ac0
