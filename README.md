@@ -1,8 +1,12 @@
 # Particle World
 A particle simulator, that by using simple interaction rules, can create complex patterns.
 
+
 ![alt text](README-Assets/README-Project-Showcase.gif)
 [***TRY IT OUT***](https://fawy2020.itch.io/particle-world)
+
+## How it works
+Every Particle has a color, and that color defines how it interacts with other particles, because every color can get either attracted or repelled by another color, as long as that other particle of that color isn't to close, but also not to far away, where those three values, are different for every color to color combination, where for example, red to blue and blue to red, don't have to be the same value.
 
 ## Quick Start
 ### Windows
@@ -44,7 +48,6 @@ A particle simulator, that by using simple interaction rules, can create complex
 **Zoom:** Scroll with your mouse wheel anywhere there isn't UI.
 
 ## Parameters 
-<!-- ### Short Variant -->
 
 ### Simulation Details: 
 
@@ -97,5 +100,6 @@ The matrixes show the interaction parameters for every color with every color, a
 <summary> <b>Max Range Matrix:</b> The biggest distance a color can be to another color to still be affected by it / the upper bounds of the valid range. </summary>
  A color further apart than their respective Max Range value with another color, isn't affected by that other color.
 </details>
+
 
 
