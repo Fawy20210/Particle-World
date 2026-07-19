@@ -7,7 +7,7 @@ A particle simulator, that by using simple interaction rules, can create complex
 ## Quick Start
 ### Windows
 **Download**
-- [Download on itch.io](fawy2020.itch.io/particle-world)  
+- [Download on itch.io](https://fawy2020.itch.io/particle-world)  
 - [Download from Github (latest release)](Releases/Windows/ParticleWorld-0.3.zip)
 
 **Launch**
